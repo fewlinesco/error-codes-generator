@@ -1,53 +1,77 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"math/rand"
 	"os"
-	"strconv"
 	"time"
-
-	"github.com/eknkc/basex"
 )
+
+var projects = map[string]string{
+	"catalog":  "CAT",
+	"checkout": "CHE",
+	"connect":  "CON",
+	"offer":    "OFF",
+	"sparta":   "SPA",
+}
 
 func main() {
 
-	var prefix string
-	flag.StringVar(&prefix, "prefix", "", "provide a prefix for your error code, it usually is the first 3 letters of the name of the project you're working on")
-	flag.Parse()
+	var project string
 
+	if len(os.Args) < 2 {
+		fmt.Println("provide the name of the project you are currently working on as a command argument")
+		printAvailableProjects()
+		os.Exit(1)
+	}
+
+	project = os.Args[1]
+
+	prefix := getProjectPrefix(project)
 	if prefix == "" {
-		flag.PrintDefaults()
+		fmt.Printf("%s is not a known project, please input one of the following project name or add it through a Pull Request\n", project)
+		printAvailableProjects()
 		os.Exit(1)
 	}
 
 	now := time.Now()
-	code := generate(prefix, now)
+	code := generate(prefix, now, 4)
 
 	fmt.Printf(code)
 }
 
-func base34Encode(source []byte) string {
-	encoder, err := basex.NewEncoding("0123456789ABCDEFGHJKLMNPQRSTUVWXYZ")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "could not build the base34 encoder")
-		os.Exit(1)
+func printAvailableProjects() {
+	fmt.Println("Available project are:")
+	for k := range projects {
+		fmt.Printf("\t - %s\n", k)
 	}
-	return encoder.Encode(source)
 }
 
-func generate(prefix string, now time.Time) string {
-	year := strconv.Itoa(now.Year() % 100)
-	month := strconv.Itoa(int(now.Month()))
-	day := strconv.Itoa(now.Day())
-	hour := strconv.Itoa(now.Hour())
-	minute := strconv.Itoa(now.Minute())
-	second := strconv.Itoa(now.Second())
-	microsecond := strconv.Itoa(now.Nanosecond() / 1000)
+func randomString(size int) string {
+	rand.Seed(time.Now().UnixNano())
 
-	part1 := base34Encode([]byte(month)) + base34Encode([]byte(day))
+	disambiguatedAlphabet := []byte("ABCDEFGHJKLMNPQRSTUVWXYZ")
+	lenAlphabet := len(disambiguatedAlphabet)
+	res := make([]byte, size)
 
-	part2 := fmt.Sprintf("%6v", base34Encode([]byte(hour+minute+second+microsecond)))
+	for i := 0; i < size; i++ {
+		randomIndex := rand.Intn(lenAlphabet)
+		res[i] = disambiguatedAlphabet[randomIndex]
+	}
 
-	return fmt.Sprintf("%s_%s%s%s", prefix, year, part1, part2)
+	return string(res)
+}
+
+func getProjectPrefix(project string) string {
+	return projects[project]
+}
+
+func generate(prefix string, now time.Time, saltSize int) string {
+	year := (now.Year() % 100)
+	month := (int(now.Month()))
+	day := (now.Day())
+
+	salt := randomString(saltSize)
+
+	return fmt.Sprintf("%s_%02d%02d%02d_%s", prefix, year, month, day, salt)
 }

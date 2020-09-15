@@ -44,7 +44,7 @@ jobs:
         uses: mislav/bump-homebrew-formula-action@v1
         with:
           formula-name: fwl_error
-          homebrew-tap: github.com/fewlinesco/homebrew-tap
+          homebrew-tap: fewlinesco/homebrew-tap
           base-branch: master
           download-url: ${{ steps.upload_release.browser_download_url }}
           commit-message: "{{formulaName}} {{version}}"

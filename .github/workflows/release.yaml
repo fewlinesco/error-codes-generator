@@ -47,7 +47,7 @@ jobs:
           homebrew-tap: github.com/fewlinesco/homebrew-tap
           base-branch: master
           download-url: ${{ steps.upload_release.browser_download_url }}
-          commit-message: {{formulaName}} {{version}}
+          commit-message: "{{formulaName}} {{version}}"
         env:
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
 

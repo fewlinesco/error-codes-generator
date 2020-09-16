@@ -20,7 +20,7 @@ func main() {
 	var project string
 
 	if len(os.Args) < 2 {
-		fmt.Println("provide the name of the project you are currently working on as a command argument")
+		fmt.Fprintf(os.Stderr, "provide the name of the project you are currently working on as a command argument")
 		printAvailableProjects()
 		os.Exit(1)
 	}
@@ -29,7 +29,7 @@ func main() {
 
 	prefix := getProjectPrefix(project)
 	if prefix == "" {
-		fmt.Printf("%s is not a known project, please input one of the following project name or add it through a Pull Request\n", project)
+		fmt.Fprintf(os.Stderr, "%s is not a known project, please input one of the following project name or add it through a Pull Request\n", project)
 		printAvailableProjects()
 		os.Exit(1)
 	}
@@ -37,7 +37,7 @@ func main() {
 	now := time.Now()
 	code := generate(prefix, now, 4)
 
-	fmt.Printf(code)
+	fmt.Println(code)
 }
 
 func printAvailableProjects() {

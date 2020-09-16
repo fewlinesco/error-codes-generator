@@ -19,7 +19,6 @@ jobs:
       - name: Build CLI
         run: |
           go build -o fwl-error main.go
-          tar -czvf fwl-error.tar.gz fwl-error
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -37,8 +36,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./fwl-error.tar.gz
-          asset_name: fwl-error.tar.gz
+          asset_path: ./fwl-error
+          asset_name: fwl-error
           asset_content_type: application/octet-stream
       - name: Bump Formula
         uses: mislav/bump-homebrew-formula-action@v1
@@ -46,7 +45,7 @@ jobs:
           formula-name: fwl_error
           homebrew-tap: fewlinesco/homebrew-tap
           base-branch: master
-          download-url: ${{ steps.upload_release.browser_download_url }}
+          download-url: ${{ steps.upload_release.outputs.browser_download_url }}
           commit-message: "{{formulaName}} {{version}}"
         env:
           COMMITTER_TOKEN: ${{ secrets.FRIDA_ACCESS_TOKEN_FOR_FORMULA_PUSH }}

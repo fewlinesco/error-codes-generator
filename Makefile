@@ -17,7 +17,7 @@ MANIFEST_PATH=manifest.txt
 
 GO_BIN := go
 GO_FMT_BIN := gofmt
-GO_LINT := golint
+GO_LINT := go run ./vendor/golang.org/x/lint/golint
 GO_STATICCHECK_BIN := staticcheck
 
 GIT_BIN := git
@@ -43,7 +43,7 @@ test-fmt:
 
 test-lint:
 	@echo "+ $@"
-	@test -z "$$($(GO_LINT) ./... | grep -v 'should have comment' | grep /openapi-clients/ | tee /dev/stderr )"
+	@test -z "$$($(GO_LINT) main.go | grep -v 'should have comment' | grep /openapi-clients/ | tee /dev/stderr )"
 
 test-tidy:
 	@echo "+ $@"

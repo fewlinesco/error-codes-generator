@@ -43,7 +43,7 @@ test-fmt:
 
 test-lint:
 	@echo "+ $@"
-	@test -z "$$($(GO_LINT) main.go | grep -v 'should have comment' | grep /openapi-clients/ | tee /dev/stderr )"
+	@test -z "$$($(GO_LINT) main.go | tee /dev/stderr )"
 
 test-tidy:
 	@echo "+ $@"

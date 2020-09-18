@@ -18,7 +18,7 @@ MANIFEST_PATH=manifest.txt
 GO_BIN := go
 GO_FMT_BIN := gofmt
 GO_LINT := go run ./vendor/golang.org/x/lint/golint
-GO_STATICCHECK_BIN := staticcheck
+GO_STATICCHECK_BIN := $(GO_BIN) run ./vendor/honnef.co/go/tools/cmd/staticcheck
 
 GIT_BIN := git
 

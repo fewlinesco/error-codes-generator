@@ -20,7 +20,7 @@ func main() {
 	var project string
 
 	if len(os.Args) < 2 {
-		fmt.Fprintf(os.Stderr, "provide the name of the project you are currently working on as a command argument")
+		fmt.Fprintln(os.Stderr, "provide the name of the project you are currently working on as a command argument")
 		printAvailableProjects()
 		os.Exit(1)
 	}

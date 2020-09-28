@@ -19,7 +19,7 @@ jobs:
       - name: Build CLI for OSx
         run: |
           GOOS=darwin GOARCH=amd64 go build -o fwl-error main.go
-          tar -czf fwl-error-darwin-amd64.tar.gz fwl-error
+          tar czf fwl-error-darwin-amd64.tar.gz fwl-error
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -37,9 +37,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./fwl-error
+          asset_path: ./fwl-error-darwin-amd64.tar.gz
           asset_name: fwl-error-darwin-amd64.tar.gz
-          asset_content_type: application/octet-stream
+          asset_content_type: application/gzip
       - name: Bump Formula
         uses: mislav/bump-homebrew-formula-action@v1
         with:

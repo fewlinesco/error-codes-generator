@@ -12,4 +12,4 @@ Alternatively you can run:
 ```shell
 $ brew tap fewlinesco/tap
 $ brew install fwl_error
-``
+```
